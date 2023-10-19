@@ -1,19 +1,14 @@
 import numpy as np
-import gc
-from time import time
-import math
-import pickle
-import pathlib
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import data_utils
-import os
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LSTM
 
-ROOT = '/Users/Documents/ML Projects/biods220/EHR-Sepsis-Prediction/'
-target = "VANCOMYCIN"
+ROOT = '/home/sameer/biods220/EHR-Sepsis-Prediction/'
+target = "VANCOMYCIN" # 'SEPSIS' or 'MI' or 'VANCOMYCIN'
 EPOCHS=10
 BATCH_SIZE=16
 
@@ -90,11 +85,19 @@ if __name__ == "__main__":
     lstm_hidden_units = 256
     model = build_masked_lstm_model(num_timesteps, num_features, lstm_hidden_units)
     model.compile(loss='binary_crossentropy',
-                  optimizer='adam')
+                  optimizer='adam',
+                  metrics=[tf.keras.metrics.BinaryAccuracy()])
     model.summary()
     
     history = model.fit(train_x, train_y, validation_data=(val_x,val_y),
                     batch_size=BATCH_SIZE,
                     epochs=EPOCHS, verbose=2,
                     shuffle=True)
+    
+    results = model.evaluate(test_x, test_y, batch_size=128)
+    print("test loss, test acc:", results)
+
+    print("Generate predictions for 3 samples")
+    predictions = model.predict(test_x[:3])
+    print("predictions shape:", predictions.shape)
     
