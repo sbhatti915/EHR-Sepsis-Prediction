@@ -8,7 +8,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LSTM
 
 ROOT = '/home/sameer/biods220/EHR-Sepsis-Prediction/'
-target = "VANCOMYCIN" # 'SEPSIS' or 'MI' or 'VANCOMYCIN'
+target = "SEPSIS" # 'SEPSIS' or 'MI' or 'VANCOMYCIN'
 EPOCHS=10
 BATCH_SIZE=16
 
